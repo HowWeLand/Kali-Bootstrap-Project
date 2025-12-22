@@ -27,3 +27,11 @@
 
 # Tmpfs
 tmpfs /tmp tmpfs defaults,noatime,mode=1777 0 0
+
+# Swap Volume, Only Enables if ram < 16GB, optional < 32GB, pointless > 32 GB and with modern SSDs because
+# suspend and sleep are no faster than shutdown and bootup and eat up significant space
+# On btrfs you MUST put your swapfile on a seperate subvolume from the rest of the filesystem or          
+# it will NOT snapshot.  You have been warned
+# /dev/mapper/cryptroot /swap btrfs defaults,subvol=@swap,nodatacow,noatime
+# Swap file added seperately on BTRFS
+# /swap/swapfile  none swap sw 0 0

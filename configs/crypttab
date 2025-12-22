@@ -1,0 +1,7 @@
+# <target name> <source device> <key file> <options>
+
+# Root partition - unlocked via keyfile on boot USB
+cryptroot /dev/disk/by-partlabel/cryptroot /dev/disk/by-partlabel/bootkey:/keyfile luks,keyscript=/lib/cryptsetup/scripts/passdev
+
+# Home partition - unlocked via same keyfile
+crypthome /dev/disk/by-partlabel/crypthome /dev/disk/by-partlabel/bootkey:/keyfile luks,keyscript=/lib/cryptsetup/scripts/passdev
