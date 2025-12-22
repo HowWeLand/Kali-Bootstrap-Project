@@ -1,0 +1,29 @@
+# /etc/fstab - $HOSTNAME goes here for tracking purposes
+# <device> <mount point> <type> <options> <dump> <pass>
+
+# Root filesystem
+/dev/mapper/cryptroot / btrfs defaults,noatime,compress=zstd:3,ssd,discard=async,subvol=@ 0 0
+
+# Boot partitions
+/dev/disk/by-partlabel/BOOT /boot ext4 defaults,noatime 0 2
+/dev/disk/by-partlabel/ESP /boot/efi vfat defaults,noatime,umask=0077 0 2
+
+# System subvolumes (CoW enabled, compression)
+/dev/mapper/cryptroot /opt btrfs defaults,noatime,compress=zstd:3,ssd,discard=async,subvol=@opt 0 0
+/dev/mapper/cryptroot /srv btrfs defaults,noatime,compress=zstd:3,ssd,discard=async,subvol=@srv 0 0
+/dev/mapper/cryptroot /usr/local btrfs defaults,noatime,compress=zstd:3,ssd,discard=async,subvol=@usr@local 0 0
+/dev/mapper/cryptroot /var/log btrfs defaults,noatime,compress=zstd:3,ssd,discard=async,subvol=@var@log 0 0
+
+# Cache/tmp subvolumes (nodatacow for performance)
+/dev/mapper/cryptroot /var/cache btrfs defaults,noatime,nodatacow,ssd,discard=async,subvol=@var@cache 0 0
+/dev/mapper/cryptroot /var/tmp btrfs defaults,noatime,nodatacow,ssd,discard=async,subvol=@var@tmp 0 0
+
+# Home (separate encrypted drive, CoW + compression)
+/dev/mapper/crypthome /home btrfs defaults,noatime,compress=zstd:3,subvol=@home 0 0
+
+# VM/Container storage (nodatacow for performance)
+/dev/mapper/crypthome /var/lib/libvirt/images btrfs defaults,noatime,nodatacow,subvol=@var@lib@libvirt@images 0 0
+/dev/mapper/crypthome /var/lib/containers btrfs defaults,noatime,nodatacow,subvol=@var@lib@containers 0 0
+
+# Tmpfs
+tmpfs /tmp tmpfs defaults,noatime,mode=1777 0 0

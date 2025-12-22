@@ -1,0 +1,10 @@
+# Function for GPG pubkey export to clipboard
+gpg-copy-pub() {
+  if [[ $# -eq 0 ]]; then
+    gpg --export --armor | xclip -selection clipboard
+    echo "✓ Default public key copied to clipboard."
+  else
+    gpg --export --armor "$1" | xclip -selection clipboard
+    echo "✓ Public key for '$1' copied to clipboard."
+  fi
+}

@@ -1,5 +1,21 @@
 # Kali Bootstrap Documentation
 
+---
+
+⚠️ **CONTENT WARNING: TECHNICAL PROFANITY AHEAD** ⚠️
+
+This documentation contains profanity. Not gratuitously, but naturally - the way people actually talk when systems break at 3 AM.
+
+**If "fuck" in a technical context offends you:** This isn't the guide for you. Find a sanitized tutorial elsewhere.
+
+**If you're here to learn:** Welcome. The language is colorful but the information is solid.
+
+As Jello Biafra said: *"If it offends you, just don't listen to it."*
+
+See [On Language and Tone](appendices/on-language-and-tone.md) for the full philosophy.
+
+---
+
 ## Philosophy
 
 **If I can't teach it, do I really understand it?**

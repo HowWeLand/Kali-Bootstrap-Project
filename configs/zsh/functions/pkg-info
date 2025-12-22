@@ -1,0 +1,6 @@
+# Show package details with tags
+pkg-info() {
+  aptitude show "$1"
+  echo "\nTags:"
+  aptitude search "?exact-name($1)" -F '%T'
+}

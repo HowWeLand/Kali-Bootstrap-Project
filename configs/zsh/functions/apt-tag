@@ -1,0 +1,5 @@
+# Install package with dependencies, all tagged with package name
+apt-tag() {
+  local tag=$1; shift
+  sudo aptitude install --add-user-tag="$tag" "$@"
+}

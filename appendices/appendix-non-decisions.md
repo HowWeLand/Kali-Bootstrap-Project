@@ -86,25 +86,25 @@ Status: All need desperate refreshing as of 2025
 
 ### OpenRC, s6, runit, and other systemd alternatives
 
-**Status: Acknowledged preference, but not viable for this project**
+### Init System Choice: systemd vs OpenRC
 
-Kali uses systemd as the Debian default. Deviating creates a maintenance nightmare. Most Kali tools are init agnostic, but some assume systemd presence. The OpenRC documentation ecosystem has atrophied over the past decade. If you want OpenRC, use Devuan. The s6 and runit alternatives have better documentation but are server focused, not desktop multi-user systems.
+**Status: BOTH are viable - choice depends on your setup**
 
-Layering Kali repos over Devuan or other alternative init distros puts you in FrankenDebian territory. Nobody wants that.
+**Use systemd if:**
+- Single drive installation
+- Simple partition layout
+- Want GNOME desktop
+- Prefer Kali defaults
 
-**Personal preference vs pragmatic choice:**
+**Use OpenRC if:**
+- Multiple encrypted drives with BTRFS subvolumes
+- Experienced systemd mount ordering failures
+- Prefer simpler, more predictable boot process
+- Don't need GNOME
 
-I prefer OpenRC's simpler dependency model and easier auditability. Slower boot means less dependency magic and more opportunity for auditing when things break. However, this project accepts systemd's complexity for ecosystem compatibility.
+**OpenRC conversion procedure documented in:** [link to new OpenRC section]
 
-**What's changing:**
-
-Systemd is modularizing (systemd-cryptsetup as a separate component). Debian Forky is actively deprecating sysv compatibility during this development cycle, with maintainers being told to migrate now rather than wait for freeze. Since Kali-rolling tracks Debian testing (which is Forky), this affects Kali immediately.
-
-Kali currently implements their "network services disabled by default" security policy through a custom `update-rc.d` wrapper script (sysv-era tooling). This needs to migrate to native systemd mechanisms like preset files or unit overrides. Kali faces a double challenge: watching how Debian implements systemd-native service policy management, then either adapting Debian's approach or implementing their own solution.
-
-This doesn't negate the entropy of all the unit files, but systemd is at least shedding some entropy through modularization.
-
-**This is documented as a tradeoff:** accepting systemd complexity for tool ecosystem compatibility.
+**What changed:** Original documentation assumed systemd was required. Real-world testing proved that systemd fails at mounting multiple encrypted BTRFS subvolumes across different drives. OpenRC solves this completely.
 
 ---
 

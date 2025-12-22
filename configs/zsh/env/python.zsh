@@ -1,0 +1,1 @@
+export PATH=$PIPX_BIN_DIR:$PATH

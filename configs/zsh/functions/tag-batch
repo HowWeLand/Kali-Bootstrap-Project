@@ -1,0 +1,6 @@
+# Tag multiple packages at once
+tag-batch() {
+  local tag="$1"; shift
+  echo "📦 Tagging $# packages as: $tag"
+  sudo aptitude add-user-tag "$tag" "$@"
+}

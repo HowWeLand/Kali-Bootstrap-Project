@@ -1,0 +1,4 @@
+# Find all packages with specific tag
+tag-search() {
+  aptitude search "?user-tag($1)"
+}

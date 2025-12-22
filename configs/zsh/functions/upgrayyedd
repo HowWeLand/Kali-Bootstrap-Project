@@ -1,0 +1,24 @@
+# Safe system upgrade function
+upgrayyedd() {
+  echo "🔄 Step 1: Updating package lists..."
+  sudo apt update || return 1
+  echo "\n📦 Step 2: Packages that would upgrade:"
+  apt list --upgradable
+  echo -n "\nProceed with upgrade? (type 'yes' to continue): "
+  read -r confirm
+  if [[ "$confirm" != "yes" ]]; then
+    echo "❌ Upgrade cancelled"
+    return 1
+  fi
+  sudo apt full-upgrade || return 1
+  echo "\n🧹 Step 3: Packages that can be removed:"
+  apt-get -s autopurge | grep '^Remv'
+  echo -n "\nProceed with cleanup? (type 'yes' to continue): "
+  read -r confirm2
+  if [[ "$confirm2" != "yes" ]]; then
+    echo "❌ Cleanup cancelled (upgrade completed)"
+    return 0
+  fi
+  sudo apt-get autopurge
+  echo "✅ Upgrade complete"
+}
