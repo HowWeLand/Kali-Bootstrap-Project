@@ -43,8 +43,8 @@ generate_hostname() {
 
 # Repository paths (edit if running outside repo context)
 REPO_ROOT="$(dirname "$(readlink -f "$0")")/.."
-CONFIG_DIR="${REPO_ROOT}/config-files"
-SCRIPT_DIR="${REPO_ROOT}/scripts"
+CONFIG_DIR="${REPO_ROOT}/configs"
+SCRIPT_DIR="${REPO_ROOT}/scripts/bootstrap"
 
 # YOU MUST RUN `lsblk` FIRST AND SET THESE CORRECTLY
 # Wrong values = destroyed wrong drive = data loss
