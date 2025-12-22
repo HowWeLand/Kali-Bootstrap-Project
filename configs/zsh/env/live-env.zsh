@@ -1,6 +1,8 @@
-# Always change to current drive configuration. Could use UUID for consistency but
-# for quick and dirty work this will do.  I personally tile my terminals or multiplex in tty/ssh
+# Always change to current drive configuration. Could use UUID for consistency but 
+# expect everyone to be adults and label their stuff.  Check before you run  
+# I personally tile my terminals or multiplex in tty/ssh
 # and stack this with the output from lsblk
+# This mostly to allow me to rapidly mount and chroot into the bootstrap environment using one script.
 export ROOTDRIVE=/dev/nvme0n1
 export HOMEDRIVE=/dev/sda
 export BOOTDRIVE=/dev/sdc1

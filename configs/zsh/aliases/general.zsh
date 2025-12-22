@@ -1,9 +1,11 @@
 # General system aliases
+# Safe file operations with interactive prompts and verbose output
 
 # =============================================================================
-# File Operations - Interactive & Verbose (FIXED)
+# File Operations - Interactive & Verbose
 # =============================================================================
-# Use 'command' to prevent recursive alias loops.
+# Use 'command' to prevent recursive alias loops
+
 alias cp='command cp -iv'
 alias mv='command mv -iv'
 alias rm='command rm -Iv'
@@ -19,7 +21,7 @@ alias chown='command chown -v'
 # =============================================================================
 if command -v xclip &>/dev/null; then
   alias clipboard='xclip -selection clipboard'
-  alias pasteboard='xclip -selection clipboard -o' # Paste
+  alias pasteboard='xclip -selection clipboard -o'
 fi
 
 # =============================================================================

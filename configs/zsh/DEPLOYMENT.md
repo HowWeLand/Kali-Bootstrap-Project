@@ -1,196 +1,130 @@
-# Zsh Configuration Deployment Guide
-
-## Overview
-
-This modular Zsh configuration integrates with Kali Linux's default Zsh setup.
-
-**Important:** This does NOT replace Kali's zshrc. It extends it.
+# Zsh Configuration Deployment
 
 ## Quick Start
-
 ```bash
-# 1. Create directory structure
-mkdir -p ~/.zsh/{aliases,env,completions,functions,plugins}
-mkdir -p ~/bin ~/config ~/local/{share,state}
+# 1. Install /etc/zsh/zshenv (requires root)
+sudo cp zshenv /etc/zsh/zshenv
 
-# 2. Deploy core files
-cp zshenv ~/.zshenv
-cp user_profile.zsh ~/.zsh/
+# 2. Create XDG-compliant directory structure
+mkdir -p ~/config/zsh/{env,aliases,functions,plugins}
+mkdir -p ~/bin
+mkdir -p ~/local/{share,state}
+mkdir -p ~/.cache
 
-# 3. Deploy aliases
-cp aliases/*.zsh ~/.zsh/aliases/
+# 3. Deploy configuration files
+cp user_profile.zsh ~/config/zsh/
+cp env/*.zsh ~/config/zsh/env/
+cp aliases/*.zsh ~/config/zsh/aliases/
+cp plugins/*.zsh ~/config/zsh/plugins/
+cp functions/*.zsh ~/config/zsh/functions/
 
-# 4. Deploy environment files (only for languages you use)
-cp env/python.zsh ~/.zsh/env/     # If using Python
-cp env/rust.zsh ~/.zsh/env/       # If using Rust
-cp env/ruby.zsh ~/.zsh/env/       # If using Ruby
-cp env/go.zsh ~/.zsh/env/         # If using Go
-cp env/javascript.zsh ~/.zsh/env/ # If using Node
-cp env/custom.zsh ~/.zsh/env/     # Always deploy this one
+# 4. Deploy utility scripts
+cp bin/* ~/bin/
+chmod +x ~/bin/*
 
-# 5. Add ONE LINE to your existing ~/.zshrc
-echo '[[ -f $ZSHCONFIG/user_profile.zsh ]] && source "$ZSHCONFIG/user_profile.zsh"' >> ~/.zshrc
+# 5. Integrate with Kali's zshrc
+# Kali's zshrc will be at $ZDOTDIR/zshrc due to ZDOTDIR being set
+echo '[[ -f $ZDOTDIR/user_profile.zsh ]] && source "$ZDOTDIR/user_profile.zsh"' >> ~/config/zsh/zshrc
 
 # 6. Start new shell
 exec zsh
 ```
 
-## File Descriptions
+## What Gets Set Where
 
-### Core Files (Always Deploy)
+### `/etc/zsh/zshenv` (System-wide, all shells)
+- XDG base directories
+- LOCAL_BIN path
+- Language environment base paths
+- XDG compliance fixes for common tools
 
-- `zshenv` → `~/.zshenv`
-  - Sets ZSHCONFIG and LOCAL_BIN variables
-  - Sourced by ALL shells (interactive and non-interactive)
+### `$ZDOTDIR/user_profile.zsh` (Interactive shells)
+- Creates XDG subdirectories
+- Sources modular configs (env, aliases, functions, plugins)
+- Sets vim keybindings
 
-- `user_profile.zsh` → `~/.zsh/user_profile.zsh`
-  - Modular loader that sources all configs
-  - Sets vim keybindings
-  - Creates directories as needed
+### Language environment files
+- Create language-specific directories
+- Add language tools to PATH
+- Initialize version managers (rbenv, pyenv, etc.)
 
-### Alias Files (Always Deploy)
+### Aliases
+- Safe file operations
+- Package management helpers
+- GPG shortcuts
+- XDG compliance fixes
 
-- `aliases/aliases.zsh` - Safe file operations (cp -iv, rm -Iv)
-- `aliases/apt.zsh` - Aptitude tagging system
-- `aliases/colors.zsh` - Color enforcement for ls, grep, etc.
-- `aliases/gpg.zsh` - GPG key management helpers
-
-### Environment Files (Deploy Only What You Need)
-
-- `env/python.zsh` - pipx and pyenv configuration
-- `env/rust.zsh` - rustup and cargo paths
-- `env/ruby.zsh` - rbenv configuration
-- `env/go.zsh` - GOPATH setup
-- `env/javascript.zsh` - npm and nvm configuration
-- `env/custom.zsh` - GPG_TTY, EDITOR, XDG directories (ALWAYS DEPLOY)
-- `env/lang.zsh` - Documentation only (don't deploy)
-
-### Reference Files (DO NOT Deploy)
-
-- `KALI_DEFAULT_ZSHRC.txt` - Reference showing Kali's default zshrc
-- This shows where to add the source line
-- Your actual ~/.zshrc should remain Kali's default
-
-## Integration with Kali Default
-
-Kali's default zshrc provides:
-- Completion system setup
-- Syntax highlighting (fast-syntax-highlighting)
-- Auto-suggestions
-- Prompt configuration (two-line/one-line toggle with Ctrl+P)
-- Color support
-- Useful aliases and functions
-
-**This configuration extends those features**, it doesn't replace them.
-
-## XDG Base Directory Compliance
-
-This configuration uses custom XDG paths:
-
-- Config: `$HOME/config` (not `$HOME/.config`)
-- Data: `$HOME/local/share` (not `$HOME/.local/share`)
-- State: `$HOME/local/state` (not `$HOME/.local/state`)
-- Cache: `$HOME/.cache` (standard)
-
-Applications are configured individually for XDG compliance. See the main project documentation for per-application XDG configuration.
-
-## Language Environments
-
-Each language environment file:
-1. Checks if the language directory exists
-2. Creates it if needed
-3. Sets environment variables
-4. Adds tools to PATH
-5. Initializes version managers if present
-
-**If a language isn't installed**, its env file is harmless - it just creates empty directories.
+### Plugins
+- direnv integration
+- keychain (SSH/GPG agent)
 
 ## Verification
-
-After deployment:
-
 ```bash
-# Check variables are set
-echo $ZSHCONFIG      # Should show: /home/youruser/.zsh
-echo $LOCAL_BIN      # Should show: /home/youruser/bin
-echo $XDG_CONFIG_HOME  # Should show: /home/youruser/config
+# Check environment
+echo $ZDOTDIR          # ~/config/zsh
+echo $XDG_CONFIG_HOME  # ~/config
+echo $LOCAL_BIN        # ~/bin
+echo $CARGO_HOME       # ~/bin/rust/cargo
 
-# Check directories exist
-ls -la ~/.zsh
-ls -la ~/bin
+# Check aliases loaded
+type cp               # Should show: cp is aliased to 'command cp -iv'
+type apt-update       # Should show: apt-update is aliased to...
 
-# Test an alias
-type cp  # Should show: cp is aliased to `cp -iv'
+# Check history file location
+echo $HISTFILE        # ~/local/state/zsh/history
 
-# Check language environments (if installed)
-echo $CARGO_HOME     # If rust.zsh deployed
-echo $PIPX_HOME      # If python.zsh deployed
-```
-
-## Uninstall
-
-```bash
-# Remove custom files
-rm -rf ~/.zsh ~/.zshenv
-
-# Edit ~/.zshrc and remove the line containing "user_profile.zsh"
-
-# Or restore Kali's default
-cp /etc/skel/.zshrc ~/.zshrc
+# Check no dotfile sprawl in home
+ls -la ~ | grep "^\."  # Should only see .cache and essential dotfiles
 ```
 
 ## Troubleshooting
 
-**"ZSHCONFIG: not set"**
-- `~/.zshenv` isn't being sourced
-- Check: `ls -la ~/.zshenv`
+### "ZDOTDIR not set"
+- `/etc/zsh/zshenv` not installed or not being sourced
+- Check: `cat /etc/zsh/zshenv`
 
-**Aliases not working**
-- Source line not in zshrc
-- Check: `grep "user_profile" ~/.zshrc`
+### "Aliases not loading"
+- `user_profile.zsh` not being sourced from Kali's zshrc
+- Check: `grep "user_profile" $ZDOTDIR/zshrc`
 
-**Language paths not set**
-- Env file not deployed or has errors
-- Check: `ls ~/.zsh/env/` and `source ~/.zsh/env/python.zsh` manually
+### "Language tools not in PATH"
+- Language environment file not sourced
+- Check: `ls $ZDOTDIR/env/`
 
-**"command not found" for language tools**
-- The env files only set paths, they don't install tools
-- Install rustup, pipx, rbenv, etc. separately
+### "Git still using ~/.gitconfig"
+- Git respects XDG automatically if `$XDG_CONFIG_HOME/git/config` exists
+- Move: `mv ~/.gitconfig $XDG_CONFIG_HOME/git/config`
 
-## Apt Tagging System
+## XDG Compliance Status
 
-The apt.zsh aliases reference a Python script: `~/bin/apt-tag.py`
+**Compliant (via environment variables):**
+- zsh (ZDOTDIR, HISTFILE)
+- cargo/rustup
+- npm
+- gnupg
+- wine
+- Java preferences
+- X11 authority files
 
-This script must be created separately. It provides:
-- Tag packages with installation reason
-- List packages by tag
-- Search for packages and their tags
-- Identify safe-to-remove packages
+**Compliant (via aliases):**
+- wget (HSTS cache)
+- adb (Android)
+- keychain
 
-See the main project documentation for the apt-tag.py implementation.
+**Not compliant (upstream won't fix):**
+- Firefox (`.mozilla` in home)
+- Bash (`.bashrc`, `.bash_history`)
+- SSH (`.ssh` - intentionally left alone)
+- Flatpak (`.var`)
 
-## Additional Tools
+**Manually moved:**
+- git → `$XDG_CONFIG_HOME/git/config`
+- NSS/PKI → `$XDG_DATA_HOME/pki` (may reappear due to Chromium)
 
-This configuration expects certain tools to be installed:
+## Benefits
 
-- vim (set as $EDITOR)
-- less (set as $PAGER)
-- Language-specific tools (rustup, pipx, rbenv, etc.) - optional
-
-## Philosophy
-
-This configuration follows the project's core principle:
-
-**"If I can't teach it, do I really understand it?"**
-
-Every choice is documented. Every file has a clear purpose. Nothing is cargo-culted from other configurations without understanding why.
-
-The modular structure allows you to:
-- Deploy only what you need
-- Understand what each piece does
-- Modify individual components without breaking others
-- Version control your entire shell environment
-
-## License
-
-Same as main project (to be determined - likely MIT for configs)
+- No dotfile clutter in `$HOME`
+- Language tools isolated in `~/bin/lang/`
+- Everything version-controllable
+- Modular (add/remove languages easily)
+- Kali updates don't break your config

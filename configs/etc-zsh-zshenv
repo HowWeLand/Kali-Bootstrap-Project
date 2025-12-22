@@ -1,18 +1,48 @@
-# /etc/zsh/zshenv: system-wide .zshenv file for zsh(1).
-#
-# This file is sourced on all invocations of the shell.
-# If the -f flag is present or if the NO_RCS option is
-# set within this file, all other initialization files
-# are skipped.
-#
-# This file should contain commands to set the command
-# search path, plus other important environment variables.
-# This file should not contain commands that produce
-# output or assume the shell is attached to a tty.
-#
-# Global Order: zshenv, zprofile, zshrc, zlogin
+# /etc/zsh/zshenv
+# System-wide zsh environment - sourced by ALL zsh shells
+# Sets XDG paths and language directories before any user configs
 
-if [[ -z "$PATH" || "$PATH" == "/bin:/usr/bin" ]]
-then
-	export PATH="/usr/local/bin:/usr/bin:/bin:/usr/games"
-fi
+# XDG Base Directory (custom paths - eliminate .local sprawl)
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/local/state}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+
+# Visible bin directory (prevents ~/.local/bin sprawl)
+export LOCAL_BIN="${LOCAL_BIN:-$HOME/bin}"
+export PATH="$LOCAL_BIN:$PATH"
+
+# Zsh configuration directory (XDG-compliant)
+export ZDOTDIR="${ZDOTDIR:-$XDG_CONFIG_HOME/zsh}"
+
+# Language environment base directories
+# These are set here so they're available when mkdir runs in language files
+export CARGO_HOME="$LOCAL_BIN/rust/cargo"
+export RUSTUP_HOME="$LOCAL_BIN/rust/rustup"
+export RBENV_ROOT="$LOCAL_BIN/ruby"
+export PIPX_HOME="$LOCAL_BIN/python/pipx"
+export PIPX_BIN_DIR="$LOCAL_BIN/python/bin"
+export GOPATH="$LOCAL_BIN/go"
+export PHPENV_ROOT="$LOCAL_BIN/php"
+export PLENV_ROOT="$LOCAL_BIN/perl"
+export LUAVER_DIR="$LOCAL_BIN/lua"
+export BUN_INSTALL="$LOCAL_BIN/javascript/bun"
+export NODE_PATH="$LOCAL_BIN/javascript/node"
+
+# XDG compliance fixes for common tools (from xdg-ninja)
+export ANDROID_USER_HOME="$XDG_DATA_HOME/android"
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export KDEHOME="$XDG_CONFIG_HOME/kde"
+export ICEAUTHORITY="$XDG_CACHE_HOME/ICEauthority"
+export NPM_CONFIG_INIT_MODULE="$XDG_CONFIG_HOME/npm/config/npm-init.js"
+export NPM_CONFIG_CACHE="$XDG_CACHE_HOME/npm"
+export NPM_CONFIG_TMP="$XDG_RUNTIME_DIR/npm"
+export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
+export WINEPREFIX="$XDG_DATA_HOME/wine"
+export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
+export ERRFILE="$XDG_CACHE_HOME/X11/xsession-errors"
+export USERXSESSIONRC="$XDG_CACHE_HOME/X11/xsessionrc"
+
+# Zsh-specific XDG paths (history, completion cache)
+# These must be created manually, handled in user_profile.zsh
+export HISTFILE="$XDG_STATE_HOME/zsh/history"

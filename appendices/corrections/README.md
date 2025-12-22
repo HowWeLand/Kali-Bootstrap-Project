@@ -36,11 +36,59 @@
 - **Boot Partition Sizing** - Should be 10GB for live ISO storage (was 1GB)
 - **nvme-cli Syntax** - Requires `-H` flag for human-readable output
 
-### 2025-12-18
+### 2025-12-20
 - **Mozilla in extrepo** - Mozilla repo IS available (thought it wasn't)
 - **AppImage for OpenRC** - Primary recommendation (underestimated advantages)
 - **Flatpak GUI Tools** - Warehouse and Flatseal exist for exploration
 
 ---
 
+## Template for New Corrections
+
+When adding a correction, use this structure:
+
+```markdown
+# Correction: [Topic]
+
+**Date Discovered:** YYYY-MM-DD  
+**Impact:** [Critical/Major/Minor]  
+**Affects:** [Which documents/code]
+
+---
+
+## What Was Wrong
+[Clear statement of the incorrect information/assumption]
+
+## Why It Was Wrong
+[Explanation of why the original was incorrect]
+
+## What's Correct
+[The corrected information]
+
+## How We Discovered This
+[The process that revealed the error]
+
+## What Changed
+[Concrete changes made to documentation/code]
+
+## Lesson Learned
+[The broader principle or insight]
+
+---
+
+**Status:** [Corrected/In Progress]  
+**Related Docs:** [Links to affected documentation]
+```
+
+---
+
 *These corrections inform the synthesized `corrections-lessons-learned.md` which provides professional documentation of all lessons learned.*
+
+---
+
+**Document Status:** Index of corrections  
+**Updated:** As new corrections are added
+
+---
+
+*This documentation is licensed under [CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/). You are free to remix, correct, and make it your own with attribution.*
