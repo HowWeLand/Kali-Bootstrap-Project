@@ -26,23 +26,11 @@
 set -euo pipefail  # Exit on error, undefined variables, pipe failures
 
 #==============================================================================
-# UTILITY FUNCTIONS
-#==============================================================================
-
-generate_hostname() {
-    local prefix=${1:-laptop}
-    local min=${2:-10000}
-    local max=${3:-99999}
-    local random_num=$(shuf -i ${min}-${max} -n 1)
-    echo "${prefix}-${random_num}"
-}
-
-#==============================================================================
 # CONFIGURATION VARIABLES - EDIT THESE BEFORE RUNNING
 #==============================================================================
 
 # Repository paths (edit if running outside repo context)
-REPO_ROOT="$(dirname "$(readlink -f "$0")")/.."
+REPO_ROOT="$(dirname "$(readlink -f "$0")")/../.."
 CONFIG_DIR="${REPO_ROOT}/configs"
 SCRIPT_DIR="${REPO_ROOT}/scripts/bootstrap"
 
@@ -50,19 +38,19 @@ SCRIPT_DIR="${REPO_ROOT}/scripts/bootstrap"
 # Wrong values = destroyed wrong drive = data loss
 
 # NVMe Drive (usually /dev/nvme0n1 or /dev/nvme1n1)
-NVME_DRIVE="/edit/me/please"
+NVME_DRIVE="/dev/nvme0n1"
 
 # SATA SSD Drive (usually /dev/sda or /dev/sdb)
 SATA_DRIVE="/dev/sda"
 
 # USB Keyfile Drive (usually /dev/sdb or /dev/sdc - check lsblk!)
-USB_DRIVE="/dev/sdb"
+USB_DRIVE="/dev/sdc"
 USB_KEYFILE_PATH="/keyfile"  # Path on USB drive after mounting
 
 # Partition Sizes
 # I use a larger /boot so I can put a custom live iso as a system restore measure on here
 EFI_SIZE="512M"
-BOOT_SIZE="10G"
+BOOT_SIZE="4G"
 # Root and Home use remaining space on their respective drives
 
 # LUKS Encryption Settings
@@ -95,6 +83,9 @@ HOSTNAME="laptop-81935"
 TIMEZONE="America/Chicago"  # List: timedatectl list-timezones
 LOCALE="en_US.UTF-8"        # List: cat /usr/share/i18n/SUPPORTED
 
+# Suite will usually be rolling but maybe you're a masochist and want kali-dev or experimental
+KALI_SUITE="kali-rolling"
+
 # Kali Mirror
 KALI_MIRROR="http://http.kali.org/kali"
 
@@ -104,6 +95,80 @@ CHROOT_TARGET="/mnt"
 # Config files (must exist in CONFIG_DIR)
 FSTAB_CONFIG="fstab"
 CRYPTTAB_CONFIG="crypttab"
+
+#==============================================================================
+# LOGGING CONFIGURATION
+#==============================================================================
+
+# Create logs directory in repo root
+LOG_DIR="${REPO_ROOT}/logs"
+mkdir -p "$LOG_DIR"
+
+# Main execution log with timestamp
+EXECUTION_LOG="${LOG_DIR}/bootstrap-$(date +%Y%m%d-%H%M%S).log"
+
+# Symlink to latest for easy access
+ln -sf "$(basename "$EXECUTION_LOG")" "${LOG_DIR}/latest.log"
+
+# Hardware capability logs (timestamped)
+NVME_CAP_LOG="${LOG_DIR}/nvme-capabilities-$(date +%Y%m%d-%H%M%S).log"
+SATA_CAP_LOG="${LOG_DIR}/sata-capabilities-$(date +%Y%m%d-%H%M%S).log"
+
+# Function to log both to console and file
+log_info() {
+    echo -e "${BLUE}[INFO]${NC} $1" | tee -a "$EXECUTION_LOG"
+}
+
+log_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1" | tee -a "$EXECUTION_LOG"
+}
+
+log_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1" | tee -a "$EXECUTION_LOG"
+}
+
+log_error() {
+    echo -e "${RED}[ERROR]${NC} $1" | tee -a "$EXECUTION_LOG"
+}
+
+die() {
+    log_error "$1"
+    exit 1
+}
+
+# Log script start
+{
+    echo "================================================================================"
+    echo "Kali Bootstrap - Phase 1 Execution Log"
+    echo "================================================================================"
+    echo "Date: $(date)"
+    echo "User: $(whoami)"
+    echo "Script: $0"
+    echo "Repo Root: $REPO_ROOT"
+    echo ""
+    echo "Configuration:"
+    echo "  NVMe Drive: $NVME_DRIVE"
+    echo "  SATA Drive: $SATA_DRIVE"
+    echo "  USB Drive: $USB_DRIVE"
+    echo "  Hostname: $HOSTNAME"
+    echo "  Timezone: $TIMEZONE"
+    echo "================================================================================"
+    echo ""
+} > "$EXECUTION_LOG"
+
+#==============================================================================
+# UTILITY FUNCTIONS
+#==============================================================================
+
+generate_hostname() {
+    local prefix=${1:-laptop}
+    local min=${2:-10000}
+    local max=${3:-99999}
+    local random_num=$(shuf -i ${min}-${max} -n 1)
+    echo "${prefix}-${random_num}"
+}
+
+
 
 #==============================================================================
 # COLOR OUTPUT AND LOGGING
@@ -219,6 +284,62 @@ interactive_confirmation() {
     sleep 5
 }
 
+log_nvme_capabilities() {
+    local drive=$1
+    
+    log_info "Logging NVMe capabilities to $NVME_CAP_LOG"
+    
+    {
+        echo "=== System Info ==="
+        echo "Date: $(date)"
+        echo "Drive: $drive"
+        echo "Model: $(nvme id-ctrl "$drive" 2>/dev/null | grep "^mn" | awk '{print $3}')"
+        echo "Serial: $(nvme id-ctrl "$drive" 2>/dev/null | grep "^sn" | awk '{print $3}')"
+        echo "Firmware: $(nvme id-ctrl "$drive" 2>/dev/null | grep "^fr" | awk '{print $3}')"
+        echo ""
+        echo "=== NVMe Controller Info ==="
+        nvme id-ctrl -H "$drive" 2>&1
+        echo ""
+        echo "=== NVMe Namespace Info ==="
+        nvme id-ns -H "$drive" 2>&1
+        echo ""
+        echo "=== Sanitize Log ==="
+        nvme sanitize-log "$drive" 2>&1 || echo "Sanitize log not supported"
+        echo ""
+        echo "=== Format Capabilities (raw OACS) ==="
+        nvme id-ctrl "$drive" 2>&1 | grep -A 20 "oacs"
+    } > "$NVME_CAP_LOG"
+    
+    # Also append to main execution log
+    log_info "NVMe capabilities saved, model: $(nvme id-ctrl "$drive" 2>/dev/null | grep "^mn" | awk '{print $3}')"
+}
+
+log_sata_capabilities() {
+    local drive=$1
+    
+    log_info "Logging SATA capabilities to $SATA_CAP_LOG"
+    
+    {
+        echo "=== System Info ==="
+        echo "Date: $(date)"
+        echo "Drive: $drive"
+        echo "Model: $(hdparm -I "$drive" 2>/dev/null | grep "Model Number" | awk -F: '{print $2}' | xargs)"
+        echo "Serial: $(hdparm -I "$drive" 2>/dev/null | grep "Serial Number" | awk -F: '{print $2}' | xargs)"
+        echo "Firmware: $(hdparm -I "$drive" 2>/dev/null | grep "Firmware Revision" | awk -F: '{print $2}' | xargs)"
+        echo ""
+        echo "=== Full HDPARM Info ==="
+        hdparm -I "$drive" 2>&1
+        echo ""
+        echo "=== SMART Capabilities ==="
+        smartctl -c "$drive" 2>&1
+        echo ""
+        echo "=== Security Status ==="
+        hdparm -I "$drive" 2>&1 | grep -A 20 "Security:"
+    } > "$SATA_CAP_LOG"
+    
+    log_info "SATA capabilities saved, model: $(hdparm -I "$drive" 2>/dev/null | grep "Model Number" | awk -F: '{print $2}' | xargs)"
+}
+
 #==============================================================================
 # SECURE ERASE FUNCTIONS
 #==============================================================================
@@ -228,57 +349,105 @@ secure_erase_nvme() {
     
     log_info "Checking NVMe secure erase capability..."
     
+    # Get full controller info for debugging
+    log_info "Controller capabilities:"
+    nvme id-ctrl -H "$drive" | grep -i "format\|erase\|crypto\|sanitize"
+    
+    # Get namespace info
+    log_info "Namespace info:"
+    nvme id-ns -H "$drive" | grep -i "format\|erase"
+    
     if ! nvme id-ctrl -H "$drive" | grep -q "Format.*Supported"; then
-        die "NVMe drive $drive does not support secure erase"
+        die "NVMe drive $drive does not support format operations"
     fi
     
-    log_info "Starting NVMe secure erase on $drive..."
     log_warning "This will take 1-2 minutes and cannot be interrupted"
+    read -p "Press Enter to continue with NVMe format..." 
     
-    # Use cryptographic erase if supported, otherwise user data erase
+    # Try crypto erase first (may be advertised but not actually work)
     if nvme id-ctrl -H "$drive" | grep -q "Crypto Erase"; then
-        log_info "Using cryptographic erase (instant)"
-        nvme format "$drive" --ses=2 || die "NVMe cryptographic erase failed"
-    else
-        log_info "Using user data erase (slower)"
-        nvme format "$drive" --ses=1 || die "NVMe user data erase failed"
+        log_info "Attempting cryptographic erase (SES=2)..."
+        if nvme format "$drive" --ses=2 2>&1; then
+            log_success "Cryptographic erase succeeded"
+            return 0
+        else
+            log_warning "Cryptographic erase failed despite being advertised"
+            log_info "Falling back to user data erase"
+        fi
     fi
     
-    log_success "NVMe secure erase completed"
+    # Try user data erase
+    log_info "Attempting user data erase (SES=1)..."
+    if nvme format "$drive" --ses=1 2>&1; then
+        log_success "User data erase succeeded"
+        return 0
+    else
+        log_warning "User data erase failed"
+        log_info "Falling back to basic format"
+    fi
     
-    # Verify drive is clean
-    if lsblk "$drive" | grep -q "part"; then
-        die "Drive $drive still shows partitions after erase"
+    # Try basic format (no sanitize)
+    log_info "Attempting basic format (SES=0)..."
+    if nvme format "$drive" --ses=0 2>&1; then
+        log_success "Basic format succeeded"
+        return 0
+    else
+        die "All NVMe format operations failed - check drive compatibility"
     fi
 }
 
 unfreeze_sata_drive() {
     local drive=$1
     
-    log_info "Checking if SATA drive is frozen..."
+    log_info "Checking SATA security status..."
     
-    if hdparm -I "$drive" 2>/dev/null | grep -q "frozen"; then
-        log_warning "Drive is frozen, attempting to unfreeze via suspend..."
-        log_info "System will suspend for 5 seconds"
+    local security_status=$(hdparm -I "$drive" 2>/dev/null | grep "Security:" -A 5)
+    
+    # Check if line contains "frozen" but NOT "not frozen"
+    if echo "$security_status" | grep -q "frozen" && ! echo "$security_status" | grep -q "not.*frozen"; then
+        log_warning "Drive is frozen, attempting unfreeze via suspend..."
+
+        log_warning "═══════════════════════════════════════════════════════"
+        log_warning "  DRIVE FROZEN - SYSTEM SUSPEND REQUIRED"
+        log_warning "═══════════════════════════════════════════════════════"
+        log_warning ""
+        log_warning "Your screen will GO BLACK for 10 seconds."
+        log_warning "This is NORMAL - the system is suspending to unfreeze the drive."
+        log_warning "Do NOT panic or touch anything."
+        log_warning ""
+        log_warning "Countdown: 3..."
+        sleep 1
+        log_warning "Countdown: 2..."
+        sleep 1
+        log_warning "Countdown: 1..."
+        sleep 1
+        log_info "SUSPENDING NOW - Screen will go black..."
+        # Re-check status
+        security_status=$(hdparm -I "$drive" 2>/dev/null | grep "Security:" -A 5)
         
-        # Suspend/resume unfreezes the drive on most hardware
-        rtcwake -m mem -s 5 2>/dev/null || {
-            log_error "Suspend failed. Try manually: echo -n mem > /sys/power/state"
+        # Set deep sleep mode for proper S3 suspend
+        echo deep > /sys/power/mem_sleep 2>/dev/null || log_warning "Could not set deep sleep mode"
+        
+        # Suspend for 10 seconds
+        rtcwake -m mem -s 10 2>/dev/null || {
+            log_error "Automatic suspend failed."
+            log_warning "Manual suspend required: sudo systemctl suspend"
             read -p "Press Enter after waking system..." 
         }
         
-        sleep 2
+        sleep 2  # Give system time to fully resume
         
-        if hdparm -I "$drive" 2>/dev/null | grep -q "frozen"; then
-            die "Failed to unfreeze drive. Manual intervention required."
+        # Verify unfreeze worked
+        
+        if echo "$security_status" | grep -q "not.*frozen"; then
+            log_success "Drive unfrozen successfully"
+        else
+            die "Drive still frozen after suspend"
         fi
-        
-        log_success "Drive unfrozen"
     else
-        log_success "Drive is not frozen"
+        log_success "Drive is not frozen - proceeding with erase"
     fi
 }
-
 secure_erase_sata() {
     local drive=$1
     local temp_password="SecureEraseTemp$(date +%s)"
@@ -333,12 +502,12 @@ prepare_usb_keyfile() {
     if ! lsblk "$drive" | grep -q "part"; then
         log_info "Creating partition on USB drive..."
         parted -s "$drive" mklabel gpt
-        parted -s "$drive" mkpart primary fat32 1MiB 100%
+        parted -s "$drive" mkpart primary ext4 1MiB 100%
         parted -s "$drive" name 1 "$PARTLABEL_USB"
     fi
     
-    # Format as FAT32
-    mkfs.vfat -F 32 -n "$PARTLABEL_USB" "${drive}1" || die "Failed to format USB drive"
+    # In prepare_usb_keyfile()
+    mkfs.ext4 -L "$PARTLABEL_USB" "${drive}1" || die "Failed to format USB drive"
     
     # Mount and create keyfile
     mkdir -p /mnt/usb
@@ -484,8 +653,13 @@ create_btrfs_filesystems() {
 create_btrfs_subvolumes() {
     log_info "Creating BTRFS subvolumes..."
     
+    # Will troubleshoot this later to make it work
+    # Make mount points in /tmo
+    #mkdir -p /tmp/btrfs_{root,home}
+    
     # Mount root
     mount "/dev/mapper/$CRYPT_ROOT_NAME" /mnt || die "Failed to mount root"
+    #mount "/dev/mapper/$CRYPT_ROOT_NAME" /tmp/btrfs_root || die "Failed to mount root"
     
     # Create root subvolumes
     btrfs subvolume create /mnt/@
@@ -497,9 +671,11 @@ create_btrfs_subvolumes() {
     btrfs subvolume create /mnt/@var@tmp
     
     umount /mnt
+    #umount /tmp/btrfs_root
     
     # Mount home
-    mount "/dev/mapper/$CRYPT_HOME_NAME" /mnt || die "Failed to mount home"
+    mount "/dev/mapper/$CRYPT_HOME_NAME" /mnt || die "Failed to mount home"    
+    #mount "/dev/mapper/$CRYPT_HOME_NAME" /tmp/btrfs_home || die "Failed to mount home"
     
     # Create home subvolumes
     btrfs subvolume create /mnt/@home
@@ -507,7 +683,7 @@ create_btrfs_subvolumes() {
     btrfs subvolume create /mnt/@var@lib@containers
     
     umount /mnt
-    
+    #umount /tmo/btrfs_home
     log_success "BTRFS subvolumes created"
 }
 
@@ -524,11 +700,15 @@ mount_for_bootstrap() {
         die "Failed to mount root"
     
     # Create mount points
-    mkdir -p "$CHROOT_TARGET"/{boot,boot/efi,home,opt,srv,usr/local,var/{log,cache,tmp,lib/{libvirt/images,containers}}}
+    mkdir -p "$CHROOT_TARGET"/{boot,home,opt,srv,usr/local,var/{log,cache,tmp,lib/{libvirt/images,containers}}}
     
     # Mount boot partitions
     mount "/dev/disk/by-partlabel/$PARTLABEL_BOOT" "$CHROOT_TARGET/boot" || \
         die "Failed to mount boot"
+    
+    # Now we make /mnt/boot/efi
+    mkdir -p /mnt/boot/efi
+    
     mount "/dev/disk/by-partlabel/$PARTLABEL_EFI" "$CHROOT_TARGET/boot/efi" || \
         die "Failed to mount EFI"
     
@@ -567,8 +747,10 @@ run_bootstrap() {
     
     debootstrap \
         --variant=minbase \
-        --include=openrc,sysvinit-core,cryptsetup,btrfs-progs,grub-efi-amd64 \
-        --arch=amd64 \
+        --components=main,contrib,non-free,non-free-firmware \
+        --include=openrc,cryptsetup,git,nano,orphan-sysvinit-scripts,aptitude,kali-archive-keyring,locales,dialog \
+        --exclude=sysv-rc,systemd \
+        --keyring=/usr/share/keyrings/kali-archive-keyring.gpg \
         kali-rolling \
         "$CHROOT_TARGET" \
         "$KALI_MIRROR" || \
@@ -735,33 +917,39 @@ main() {
     verify_drive_exists "$NVME_DRIVE"
     verify_drive_exists "$SATA_DRIVE"
     verify_drive_exists "$USB_DRIVE"
-    confirm_drives_unmounted
+    #confirm_drives_unmounted
+    
+    # Log hardware capabilities BEFORE erasing
+    log_info "=== Hardware Capability Detection ==="
+    log_nvme_capabilities "$NVME_DRIVE"
+    log_sata_capabilities "$SATA_DRIVE"
     
     # Final confirmation
     interactive_confirmation
     
+    log_info "See you in the mount section"
     # Secure erase
-    log_info "=== Phase 1.1: Secure Erase ==="
-    secure_erase_nvme "$NVME_DRIVE"
-    secure_erase_sata "$SATA_DRIVE"
-    prepare_usb_keyfile "$USB_DRIVE"
+    #log_info "=== Phase 1.1: Secure Erase ==="
+    #secure_erase_nvme "$NVME_DRIVE"
+    #secure_erase_sata "$SATA_DRIVE"
+    #prepare_usb_keyfile "$USB_DRIVE"
     
     # Partitioning
-    log_info "=== Phase 1.2: Partitioning ==="
-    create_nvme_partitions "$NVME_DRIVE"
-    create_sata_partitions "$SATA_DRIVE"
+    #log_info "=== Phase 1.2: Partitioning ==="
+    #create_nvme_partitions "$NVME_DRIVE"
+    #create_sata_partitions "$SATA_DRIVE"
     
     # Wait for kernel to recognize new partitions
-    sleep 2
-    partprobe "$NVME_DRIVE" "$SATA_DRIVE"
-    sleep 2
+    #sleep 2
+    #partprobe "$NVME_DRIVE" "$SATA_DRIVE"
+    #sleep 2
     
     # Filesystem creation
-    log_info "=== Phase 1.3: Filesystems ==="
-    format_boot_partitions
-    setup_luks_encryption
-    create_btrfs_filesystems
-    create_btrfs_subvolumes
+    #log_info "=== Phase 1.3: Filesystems ==="
+    #format_boot_partitions
+    #setup_luks_encryption
+    #create_btrfs_filesystems
+    #create_btrfs_subvolumes
     
     # Mount
     log_info "=== Phase 1.4: Mounting ==="

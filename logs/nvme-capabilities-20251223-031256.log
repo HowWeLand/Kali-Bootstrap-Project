@@ -1,0 +1,450 @@
+=== System Info ===
+Date: Tue Dec 23 03:12:56 AM UTC 2025
+Drive: /dev/nvme0n1
+Model: KBG30ZMV512G
+348
+0
+0
+Serial: 49RPCFL9PX7P
+Firmware: ADXA0103
+0x12
+
+=== NVMe Controller Info ===
+NVME Identify Controller:
+vid       : 0x1179
+ssvid     : 0x1179
+sn        : 49RPCFL9PX7P        
+mn        : KBG30ZMV512G TOSHIBA                    
+fr        : ADXA0103
+rab       : 3
+ieee      : 00080d
+cmic      : 0
+  [3:3] : 0	ANA not supported
+  [2:2] : 0	PCI
+  [1:1] : 0	Single Controller
+  [0:0] : 0	Single Port
+
+mdts      : 9
+cntlid    : 0
+ver       : 0x10201
+rtd3r     : 0x7a120
+rtd3e     : 0x33450
+oaes      : 0x200
+  [31:31] : 0	Discovery Log Change Notice Not Supported
+  [27:27] : 0	Zone Descriptor Changed Notices Not Supported
+  [19:19] : 0	Allocated Namespace Attribute Notices Not Supported
+  [17:17] : 0	Reachability Groups Change Notices Not Supported
+  [16:16] : 0	Temperature Threshold Hysteresis Recovery Not Supported
+  [15:15] : 0	Normal NSS Shutdown Event Not Supported
+  [14:14] : 0	Endurance Group Event Aggregate Log Page Change Notice Not Supported
+  [13:13] : 0	LBA Status Information Notices Not Supported
+  [12:12] : 0	Predictable Latency Event Aggregate Log Change Notices Not Supported
+  [11:11] : 0	Asymmetric Namespace Access Change Notices Not Supported
+  [9:9] : 0x1	Firmware Activation Notices Supported
+  [8:8] : 0	Namespace Attribute Changed Event Not Supported
+
+ctratt    : 0
+  [19:19] : 0	Flexible Data Placement Not Supported
+  [18:18] : 0	Reservations and Host Identifier Interaction Not Supported
+  [17:17] : 0	HMB Restrict Non-Operational Power State Access Not Supported
+  [16:16] : 0	MDTS and Size Limits Exclude Metadata Not Supported
+  [15:15] : 0	Extended LBA Formats Not Supported
+  [14:14] : 0	Delete NVM Set Not Supported
+  [13:13] : 0	Delete Endurance Group Not Supported
+  [12:12] : 0	Variable Capacity Management Not Supported
+  [11:11] : 0	Fixed Capacity Management Not Supported
+  [10:10] : 0	Multi Domain Subsystem Not Supported
+  [9:9] : 0	UUID List Not Supported
+  [8:8] : 0	SQ Associations Not Supported
+  [7:7] : 0	Namespace Granularity Not Supported
+  [6:6] : 0	Traffic Based Keep Alive Not Supported
+  [5:5] : 0	Predictable Latency Mode Not Supported
+  [4:4] : 0	Endurance Groups Not Supported
+  [3:3] : 0	Read Recovery Levels Not Supported
+  [2:2] : 0	NVM Sets Not Supported
+  [1:1] : 0	Non-Operational Power State Permissive Not Supported
+  [0:0] : 0	128-bit Host Identifier Not Supported
+
+rrls      : 0
+bpcap     : 0
+  [2:2] : 0	Set Features Boot Partition Write Protection Not Supported
+  [1:0] : 0	RPMB Boot Partition Write Protection Support Not Specified
+
+nssl      : 0
+plsi      : 0
+  [1:1] : 0	Power Loss Signaling with Forced Quiescence Not Supported
+  [0:0] : 0	Power Loss Signaling with Emergency Power Fail Not Supported
+
+cntrltype : 0
+  [7:2] : 0	Reserved
+  [1:0] : 0	Controller type not reported
+fguid     : 00000000-0000-0000-0000-000000000000
+crdt1     : 0
+crdt2     : 0
+crdt3     : 0
+crcap     : 0
+  [1:1] : 0	RGRPID may change while the namespace is attached to any controller.
+  [0:0] : 0	Reachability Reporting Not Supported
+
+nvmsr     : 0
+  [1:1] : 0	NVM subsystem Not part of an Enclosure
+  [0:0] : 0	NVM subsystem Not part of a Storage Device
+
+vwci      : 0
+  [7:7] : 0	VPD Write Cycles Remaining field is Not valid.
+  [6:0] : 0	VPD Write Cycles Remaining
+
+mec       : 0
+  [1:1] : 0	NVM subsystem Not contains a Management Endpoint on a PCIe port
+  [0:0] : 0	NVM subsystem Not contains a Management Endpoint on an SMBus/I2C port
+
+oacs      : 0x17
+  [11:11] : 0	Host Managed Live Migration Not Supported
+  [10:10] : 0	Lockdown Command and Feature Not Supported
+  [9:9] : 0	Get LBA Status Capability Not Supported
+  [8:8] : 0	Doorbell Buffer Config Not Supported
+  [7:7] : 0	Virtualization Management Not Supported
+  [6:6] : 0	NVMe-MI Send and Receive Not Supported
+  [5:5] : 0	Directives Not Supported
+  [4:4] : 0x1	Device Self-test Supported
+  [3:3] : 0	NS Management and Attachment Not Supported
+  [2:2] : 0x1	FW Commit and Download Supported
+  [1:1] : 0x1	Format NVM Supported
+  [0:0] : 0x1	Security Send and Receive Supported
+
+acl       : 3
+aerl      : 3
+frmw      : 0x12
+  [5:5] : 0	Multiple FW or Boot Update Detection Not Supported
+  [4:4] : 0x1	Firmware Activate Without Reset Supported
+  [3:1] : 0x1	Number of Firmware Slots
+  [0:0] : 0	Firmware Slot 1 Read/Write
+
+lpa       : 0x2
+  [6:6] : 0	Telemetry Log Data Area 4 Not Supported
+  [5:5] : 0	LID 0x0, Scope of each command in LID 0x5, 0x12, 0x13 Not Supported
+  [4:4] : 0	Persistent Event log Not Supported
+  [3:3] : 0	Telemetry host/controller initiated log page Not Supported
+  [2:2] : 0	Extended data for Get Log Page Not Supported
+  [1:1] : 0x1	Command Effects Log Page Supported
+  [0:0] : 0	SMART/Health Log Page per NS Not Supported
+
+elpe      : 63
+  [7:0] : 63 (0's based)	Error Log Page Entries (ELPE)
+
+npss      : 4
+  [7:0] : 4 (0's based)	Number of Power States Support (NPSS)
+
+avscc     : 0x1
+  [0:0] : 0x1	Admin Vendor Specific Commands uses NVMe Format
+
+apsta     : 0x1
+  [0:0] : 0x1	Autonomous Power State Transitions Supported
+
+wctemp    : 355
+ [15:0] : 82 °C (355 K, 179 °F)	Warning Composite Temperature Threshold (WCTEMP)
+
+cctemp    : 358
+ [15:0] : 85 °C (358 K, 185 °F)	Critical Composite Temperature Threshold (CCTEMP)
+
+mtfa      : 0
+hmpre     : 9728
+hmmin     : 2560
+tnvmcap   : 0
+[127:0] : 0
+	Total NVM Capacity (TNVMCAP)
+
+unvmcap   : 0
+[127:0] : 0
+	Unallocated NVM Capacity (UNVMCAP)
+
+rpmbs     : 0
+ [31:24]: 0	Access Size
+ [23:16]: 0	Total Size
+  [5:3] : 0	Authentication Method
+  [2:0] : 0	Number of RPMB Units
+
+edstt     : 76
+dsto      : 1
+  [1:1] : 0	Host-Initiated Refresh capability Not Supported
+  [0:0] : 0x1	NVM subsystem supports only one device self-test operation in progress at a time
+
+fwug      : 1
+kas       : 0
+hctma     : 0x1
+  [0:0] : 0x1	Host Controlled Thermal Management Supported
+
+mntmt     : 348
+ [15:0] : 75 °C (348 K, 167 °F)	Minimum Thermal Management Temperature (MNTMT)
+
+mxtmt     : 355
+ [15:0] : 82 °C (355 K, 179 °F)	Maximum Thermal Management Temperature (MXTMT)
+
+sanicap   : 0
+  [31:30] : 0	Additional media modification after sanitize operation completes successfully is not defined
+  [29:29] : 0	No-Deallocate After Sanitize bit in Sanitize command Supported
+  [3:3] : 0	Media Verification and Post-Verification Deallocation state Not Supported
+  [2:2] : 0	Overwrite Sanitize Operation Not Supported
+  [1:1] : 0	Block Erase Sanitize Operation Not Supported
+  [0:0] : 0	Crypto Erase Sanitize Operation Not Supported
+
+hmminds   : 0
+hmmaxd    : 0
+nsetidmax : 0
+endgidmax : 0
+anatt     : 0
+anacap    : 0
+  [7:7] : 0	Non-zero group ID Not Supported
+  [6:6] : 0	Group ID does change
+  [4:4] : 0	ANA Change state Not Supported
+  [3:3] : 0	ANA Persistent Loss state Not Supported
+  [2:2] : 0	ANA Inaccessible state Not Supported
+  [1:1] : 0	ANA Non-optimized state Not Supported
+  [0:0] : 0	ANA Optimized state Not Supported
+
+anagrpmax : 0
+nanagrpid : 0
+pels      : 0
+domainid  : 0
+kpioc     : 0
+  [1:1] : 0	Key Per I/O capability Not apply to all namespaces
+  [0:0] : 0	Key Per I/O capability Not Supported
+
+mptfawr   : 0
+megcap    : 0
+tmpthha   : 0
+  [2:0] : 0	Temperature Threshold Maximum Hysteresis
+
+cqt       : 0
+sqes      : 0x66
+  [7:4] : 0x6	Max SQ Entry Size (64)
+  [3:0] : 0x6	Min SQ Entry Size (64)
+
+cqes      : 0x44
+  [7:4] : 0x4	Max CQ Entry Size (16)
+  [3:0] : 0x4	Min CQ Entry Size (16)
+
+maxcmd    : 0
+nn        : 1
+oncs      : 0x17
+  [12:12] : 0	Namespace Zeroes Not Supported
+  [11:11] : 0	Maximum Write Zeroes with Deallocate Not Supported
+  [10:10] : 0	All Fast Copy Not Supported
+  [9:9] : 0	Copy Single Atomicity Not Supported
+  [8:8] : 0	Copy Not Supported
+  [7:7] : 0	Verify Not Supported
+  [6:6] : 0	Timestamp Not Supported
+  [5:5] : 0	Reservations Not Supported
+  [4:4] : 0x1	Save and Select Supported
+  [3:3] : 0	Write Zeroes Not Supported
+  [2:2] : 0x1	Data Set Management Supported
+  [1:1] : 0x1	Write Uncorrectable Supported
+  [0:0] : 0x1	Compare Supported
+
+fuses     : 0
+  [0:0] : 0	Fused Compare and Write Not Supported
+
+fna       : 0
+  [3:3] : 0	Format NVM Broadcast NSID (FFFFFFFFh) Supported
+  [2:2] : 0	Crypto Erase Not Supported as part of Secure Erase
+  [1:1] : 0	Crypto Erase Applies to Single Namespace(s)
+  [0:0] : 0	Format Applies to Single Namespace(s)
+
+vwc       : 0x1
+  [2:1] : 0	Support for the NSID field set to FFFFFFFFh is not indicated
+  [0:0] : 0x1	Volatile Write Cache Present
+
+awun      : 65535
+awupf     : 0
+icsvscc   : 1
+  [0:0] : 0x1	NVM Vendor Specific Commands uses NVMe Format
+
+nwpc      : 0
+  [2:2] : 0	Permanent Write Protect Not Supported
+  [1:1] : 0	Write Protect Until Power Supply Not Supported
+  [0:0] : 0	No Write Protect and Write Protect Namespace Not Supported
+
+acwu      : 0
+ocfs      : 0
+  [3:3] : 0	Controller Copy Format 3h Not Supported
+  [2:2] : 0	Controller Copy Format 2h Not Supported
+  [1:1] : 0	Controller Copy Format 1h Not Supported
+  [0:0] : 0	Controller Copy Format 0h Not Supported
+
+sgls      : 0
+ [15:8] : 0	SGL Descriptor Threshold
+ [1:0]  : 0	Scatter-Gather Lists Not Supported
+
+mnan      : 0
+maxdna    : 0
+maxcna    : 0
+oaqd      : 0
+rhiri     : 0
+hirt      : 0
+cmmrtd    : 0
+nmmrtd    : 0
+minmrtg   : 0
+maxmrtg   : 0
+trattr    : 0
+  [2:2] : 0	Memory Range Tracking Length Limit
+  [1:1] : 0	Tracking User Data Changes Not Supported
+  [0:0] : 0	Track Host Memory Changes Not Supported
+
+mcudmq    : 0
+mnsudmq   : 0
+mcmr      : 0
+nmcmr     : 0
+mcdqpc    : 0
+subnqn    : nqn.2017-03.jp.co.toshiba:KBG30ZMV512G TOSHIBA:49RPCFL9PX7P
+ioccsz    : 0
+iorcsz    : 0
+icdoff    : 0
+fcatt     : 0
+  [0:0] : 0	Dynamic Controller Model
+
+msdbd     : 0
+ofcs      : 0
+  [0:0] : 0	Disconnect command Not Supported
+
+ps      0 : mp:3.30W operational enlat:0 exlat:0 rrt:0 rrl:0
+            rwt:0 rwl:0 idle_power:- active_power:-
+            active_power_workload:-
+            emergency power fail recovery time: -
+            forced quiescence vault time: -
+            emergency power fail vault time: -
+ps      1 : mp:2.80W operational enlat:0 exlat:0 rrt:1 rrl:1
+            rwt:1 rwl:1 idle_power:- active_power:-
+            active_power_workload:-
+            emergency power fail recovery time: -
+            forced quiescence vault time: -
+            emergency power fail vault time: -
+ps      2 : mp:2.30W operational enlat:0 exlat:0 rrt:2 rrl:2
+            rwt:2 rwl:2 idle_power:- active_power:-
+            active_power_workload:-
+            emergency power fail recovery time: -
+            forced quiescence vault time: -
+            emergency power fail vault time: -
+ps      3 : mp:0.0500W non-operational enlat:8000 exlat:32000 rrt:4 rrl:4
+            rwt:4 rwl:4 idle_power:- active_power:-
+            active_power_workload:-
+            emergency power fail recovery time: -
+            forced quiescence vault time: -
+            emergency power fail vault time: -
+ps      4 : mp:0.0050W non-operational enlat:8000 exlat:40000 rrt:4 rrl:4
+            rwt:4 rwl:4 idle_power:- active_power:-
+            active_power_workload:-
+            emergency power fail recovery time: -
+            forced quiescence vault time: -
+            emergency power fail vault time: -
+
+=== NVMe Namespace Info ===
+NVME Identify Namespace 1:
+nsze    : 0x3b9e12b0	Total size in logical blocks
+ncap    : 0x3b9e12b0	Maximum size in logical blocks
+nuse    : 0x3b9e12b0	Current size in logical blocks
+nsfeat  : 0
+  [7:7] : 0	NPRG, NPRA and NORS are Not Supported
+  [6:6] : 0	Single Atomicity Mode applies to write operations
+  [5:4] : 0	NPWG, NPWA, NPDG, NPDGL, NPDA, and NOWS are Not Supported
+  [3:3] : 0	NGUID and EUI64 fields if non-zero, Reused
+  [2:2] : 0	Deallocated or Unwritten Logical Block error Not Supported
+  [1:1] : 0	Namespace uses AWUN, AWUPF, and ACWU
+  [0:0] : 0	Thin Provisioning Not Supported
+
+nlbaf   : 1
+flbas   : 0x1
+  [6:5] : 0	Most significant 2 bits of Current LBA Format Selected
+  [4:4] : 0	Metadata Transferred in Separate Contiguous Buffer
+  [3:0] : 0x1	Least significant 4 bits of Current LBA Format Selected
+
+mc      : 0
+  [1:1] : 0	Metadata Pointer Not Supported
+  [0:0] : 0	Metadata as Part of Extended Data LBA Not Supported
+
+dpc     : 0
+  [4:4] : 0	Protection Information Transferred as Last Bytes of Metadata Not Supported
+  [3:3] : 0	Protection Information Transferred as First Bytes of Metadata Not Supported
+  [2:2] : 0	Protection Information Type 3 Not Supported
+  [1:1] : 0	Protection Information Type 2 Not Supported
+  [0:0] : 0	Protection Information Type 1 Not Supported
+
+dps     : 0
+  [3:3] : 0	Protection Information is Transferred as Last Bytes of Metadata
+  [2:0] : 0	Protection Information Disabled
+
+nmic    : 0
+  [1:1] : 0	Namespace is Not a Dispersed Namespace
+  [0:0] : 0	Namespace Multipath Not Capable
+
+rescap  : 0
+  [7:7] : 0	Ignore Existing Key - Used as defined in revision 1.2.1 or earlier
+  [6:6] : 0	Exclusive Access - All Registrants Not Supported
+  [5:5] : 0	Write Exclusive - All Registrants Not Supported
+  [4:4] : 0	Exclusive Access - Registrants Only Not Supported
+  [3:3] : 0	Write Exclusive - Registrants Only Not Supported
+  [2:2] : 0	Exclusive Access Not Supported
+  [1:1] : 0	Write Exclusive Not Supported
+  [0:0] : 0	Persist Through Power Loss Not Supported
+
+fpi     : 0
+  [7:7] : 0	Format Progress Indicator Not Supported
+
+dlfeat  : 0
+  [4:4] : 0	Guard Field of Deallocated Logical Blocks is set to 0xFFFF
+  [3:3] : 0	Deallocate Bit in the Write Zeroes Command is Not Supported
+  [2:0] : 0	Bytes Read From a Deallocated Logical Block and its Metadata are Not Reported
+
+nawun   : 0
+nawupf  : 0
+nacwu   : 0
+nabsn   : 0
+nabo    : 0
+nabspf  : 0
+noiob   : 0
+nvmcap  : 0
+mssrl   : 0
+mcl     : 0
+msrc    : 0
+kpios   : 0
+  [1:1] : 0	Key Per I/O Capability Not Supported
+  [0:0] : 0	Key Per I/O Capability Disabled
+
+nulbaf  : 0
+kpiodaag: 0
+anagrpid: 0
+nsattr	: 0
+  [0:0] : 0	Namespace Not Write Protected
+
+nvmsetid: 0
+endgid  : 0
+nguid   : 00000000000000000000000000000000
+eui64   : 00080d040086e186
+LBA Format  0 : Metadata Size: 0   bytes - Data Size: 4096 bytes - Relative Performance: 0 Best 
+LBA Format  1 : Metadata Size: 0   bytes - Data Size: 512 bytes - Relative Performance: 0x3 Degraded (in use)
+
+=== Sanitize Log ===
+NVMe status: Invalid Log Page: The log page indicated is invalid(0x6109)
+Sanitize log not supported
+
+=== Format Capabilities (raw OACS) ===
+oacs      : 0x17
+acl       : 3
+aerl      : 3
+frmw      : 0x12
+lpa       : 0x2
+elpe      : 63
+npss      : 4
+avscc     : 0x1
+apsta     : 0x1
+wctemp    : 355
+cctemp    : 358
+mtfa      : 0
+hmpre     : 9728
+hmmin     : 2560
+tnvmcap   : 0
+unvmcap   : 0
+rpmbs     : 0
+edstt     : 76
+dsto      : 1
+fwug      : 1
+kas       : 0

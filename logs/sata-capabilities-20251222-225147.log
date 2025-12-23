@@ -1,0 +1,169 @@
+=== System Info ===
+Date: Mon Dec 22 10:51:47 PM UTC 2025
+Drive: /dev/sda
+Model: Samsung SSD 860 EVO M.2 1TB
+Serial: S415NB0M106807H
+Firmware: RVT22B6Q
+
+=== Full HDPARM Info ===
+
+/dev/sda:
+
+ATA device, with non-removable media
+	Model Number:       Samsung SSD 860 EVO M.2 1TB             
+	Serial Number:      S415NB0M106807H     
+	Firmware Revision:  RVT22B6Q
+	Transport:          Serial, ATA8-AST, SATA 1.0a, SATA II Extensions, SATA Rev 2.5, SATA Rev 2.6, SATA Rev 3.0
+Standards:
+	Used: unknown (minor revision code 0x005e) 
+	Supported: 11 8 7 6 5 
+	Likely used: 11
+Configuration:
+	Logical		max	current
+	cylinders	16383	16383
+	heads		16	16
+	sectors/track	63	63
+	--
+	CHS current addressable sectors:    16514064
+	LBA    user addressable sectors:   268435455
+	LBA48  user addressable sectors:  1953525168
+	Logical  Sector size:                   512 bytes
+	Physical Sector size:                   512 bytes
+	Logical Sector-0 offset:                  0 bytes
+	device size with M = 1024*1024:      953869 MBytes
+	device size with M = 1000*1000:     1000204 MBytes (1000 GB)
+	cache/buffer size  = unknown
+	Form Factor: unknown (0x0007]
+	Nominal Media Rotation Rate: Solid State Device
+Capabilities:
+	LBA, IORDY(can be disabled)
+	Queue depth: 32
+	Standby timer values: spec'd by Standard, no device specific minimum
+	R/W multiple sector transfer: Max = 1	Current = 1
+	DMA: mdma0 mdma1 mdma2 udma0 udma1 udma2 udma3 udma4 udma5 *udma6 
+	     Cycle time: min=120ns recommended=120ns
+	PIO: pio0 pio1 pio2 pio3 pio4 
+	     Cycle time: no flow control=120ns  IORDY flow control=120ns
+Commands/features:
+	Enabled	Supported:
+	   *	SMART feature set
+	    	Security Mode feature set
+	   *	Power Management feature set
+	   *	Write cache
+	   *	Look-ahead
+	   *	Host Protected Area feature set
+	   *	WRITE_BUFFER command
+	   *	READ_BUFFER command
+	   *	NOP cmd
+	   *	DOWNLOAD_MICROCODE
+	    	SET_MAX security extension
+	   *	48-bit Address feature set
+	   *	Device Configuration Overlay feature set
+	   *	Mandatory FLUSH_CACHE
+	   *	FLUSH_CACHE_EXT
+	   *	SMART error logging
+	   *	SMART self-test
+	   *	General Purpose Logging feature set
+	   *	WRITE_{DMA|MULTIPLE}_FUA_EXT
+	   *	64-bit World wide name
+	    	Write-Read-Verify feature set
+	   *	WRITE_UNCORRECTABLE_EXT command
+	   *	{READ,WRITE}_DMA_EXT_GPL commands
+	   *	Segmented DOWNLOAD_MICROCODE
+	   *	Gen1 signaling speed (1.5Gb/s)
+	   *	Gen2 signaling speed (3.0Gb/s)
+	   *	Gen3 signaling speed (6.0Gb/s)
+	   *	Native Command Queueing (NCQ)
+	   *	Phy event counters
+	   *	READ_LOG_DMA_EXT equivalent to READ_LOG_EXT
+	   *	DMA Setup Auto-Activate optimization
+	   *	Device-initiated interface power management
+	   *	Asynchronous notification (eg. media change)
+	   *	Software settings preservation
+	    	Device Sleep (DEVSLP)
+	   *	SMART Command Transport (SCT) feature set
+	   *	SCT Write Same (AC2)
+	   *	SCT Error Recovery Control (AC3)
+	   *	SCT Features Control (AC4)
+	   *	SCT Data Tables (AC5)
+	   *	Device encrypts all user data
+	   *	DOWNLOAD MICROCODE DMA command
+	   *	SET MAX SETPASSWORD/UNLOCK DMA commands
+	   *	WRITE BUFFER DMA command
+	   *	READ BUFFER DMA command
+	   *	Data Set Management TRIM supported (limit 8 blocks)
+	   *	Deterministic read ZEROs after TRIM
+Security: 
+	Master password revision code = 65534
+		supported
+	not	enabled
+	not	locked
+	not	frozen
+	not	expired: security count
+		supported: enhanced erase
+	4min for SECURITY ERASE UNIT. 8min for ENHANCED SECURITY ERASE UNIT.
+Logical Unit WWN Device Identifier: 5002538e40bc5465
+	NAA		: 5
+	IEEE OUI	: 002538
+	Unique ID	: e40bc5465
+Device Sleep:
+	DEVSLP Exit Timeout (DETO): 50 ms (drive)
+	Minimum DEVSLP Assertion Time (MDAT): 30 ms (drive)
+Checksum: correct
+
+=== SMART Capabilities ===
+smartctl 7.5 2025-04-30 r5714 [x86_64-linux-6.12.38+kali-amd64] (local build)
+Copyright (C) 2002-25, Bruce Allen, Christian Franke, www.smartmontools.org
+
+=== START OF READ SMART DATA SECTION ===
+General SMART Values:
+Offline data collection status:  (0x00)	Offline data collection activity
+					was never started.
+					Auto Offline Data Collection: Disabled.
+Self-test execution status:      (   0)	The previous self-test routine completed
+					without error or no self-test has ever 
+					been run.
+Total time to complete Offline 
+data collection: 		(    0) seconds.
+Offline data collection
+capabilities: 			 (0x53) SMART execute Offline immediate.
+					Auto Offline data collection on/off support.
+					Suspend Offline collection upon new
+					command.
+					No Offline surface scan supported.
+					Self-test supported.
+					No Conveyance Self-test supported.
+					Selective Self-test supported.
+SMART capabilities:            (0x0003)	Saves SMART data before entering
+					power-saving mode.
+					Supports SMART auto save timer.
+Error logging capability:        (0x01)	Error logging supported.
+					General Purpose Logging supported.
+Short self-test routine 
+recommended polling time: 	 (   2) minutes.
+Extended self-test routine
+recommended polling time: 	 (  85) minutes.
+SCT capabilities: 	       (0x003d)	SCT Status supported.
+					SCT Error Recovery Control supported.
+					SCT Feature Control supported.
+					SCT Data Table supported.
+
+
+=== Security Status ===
+Security: 
+	Master password revision code = 65534
+		supported
+	not	enabled
+	not	locked
+	not	frozen
+	not	expired: security count
+		supported: enhanced erase
+	4min for SECURITY ERASE UNIT. 8min for ENHANCED SECURITY ERASE UNIT.
+Logical Unit WWN Device Identifier: 5002538e40bc5465
+	NAA		: 5
+	IEEE OUI	: 002538
+	Unique ID	: e40bc5465
+Device Sleep:
+	DEVSLP Exit Timeout (DETO): 50 ms (drive)
+	Minimum DEVSLP Assertion Time (MDAT): 30 ms (drive)
+Checksum: correct
