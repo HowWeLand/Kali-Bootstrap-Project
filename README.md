@@ -206,18 +206,18 @@ The documentation comes first. Automation implements what's documented. This ens
 
 ## Related Projects
 
-**[Security-Lab-Infrastructure](https://github.com/[username]/Security-Lab-Infrastructure)** [ARCHIVED]
+**[Security-Lab-Infrastructure](https://github.com/HowWeLand/Security-Lab-Infrastructure)** [ARCHIVED]
 - Exploratory work that led to this systematic approach
 - Contains proof-of-concept scripts with useful patterns
 - Reference material, not active development
 
 ## License
 
-[Choose appropriate license - MIT, GPL, CC-BY-SA, etc.]
+See [License.md](https://github.com/HowWeLand/Kali-Bootstrap-Project/blob/main/LICENSE.md) for our multi-license approach
 
 ## Contact
 
-[Your preferred contact method]
+jamesmyintjr@proton.me
 
 ---
 
